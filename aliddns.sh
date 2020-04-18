@@ -8,15 +8,6 @@ if [ ! -n $1 ] ; then
 fi
 aliddns_name=$1
 host_file=/etc/hosts
-#for shadowsocks    
-if [ `iptables -t nat -L -nv|wc -l` != "14" ];then
-	iptables -t nat -D SHADOWSOCKS $((`iptables -t nat -L -nv|wc -l` - 16))
-fi
-end() {
-    if [ `iptables -t nat -L -nv|wc -l` != "14" ];then
-        iptables -t nat -A SHADOWSOCKS -p tcp -j REDIRECT --to-ports 12345
-    fi
-}
 #compare
 target_ip=`curl -s http://members.3322.org/dyndns/getip`
 current_ip=`nslookup $aliddns_name | awk '/^Address/ {print $NF}'| tail -n1`
